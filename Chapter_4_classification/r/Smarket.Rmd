@@ -1,0 +1,210 @@
+---
+title: "The Stock Marker Data"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+```{=latex}
+\section{The Data}
+```
+
+```{r}
+library(ISLR2)
+names(Smarket)
+```
+
+```{r}
+dim(Smarket)
+```
+
+```{r}
+summary(Smarket)
+```
+
+```{r}
+pairs(Smarket)
+```
+
+
+```{r}
+cor(Smarket[,-9])
+```
+
+```{r}
+attach(Smarket)
+plot(Volume)
+```
+
+
+```{=latex}
+\section{Logistic regression}
+```
+
+```{r}
+#generalized linear models
+glm.fits <- glm(
+  Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
+  data = Smarket, 
+  family = binomial
+)
+summary(glm.fits)
+```
+
+```{r}
+coef(glm.fits)
+```
+```{r}
+summary(glm.fits)$coef
+```
+
+```{r}
+# access only the p-values for the  coefficients
+summary(glm.fits)$coef[, 4]
+```
+
+```{r}
+glm.probs <- predict(glm.fits, type = "response")
+glm.probs[1:10]
+```
+
+```{r}
+contrasts(Direction)
+```
+
+```{=latex}
+\emph{The 1st line creates a vector of 1259 Down elements, the 2nd line transforms to Up all of the elements for which the  predicted probablity of a market increase exceeds 0.5}
+```
+
+```{r}
+glm.pred <- rep("Down", 1250)
+glm.pred[glm.probs > .5] = "Up"
+```
+
+
+```{=latex}
+\emph{table() produces a confusion matrix in order to determine how many observations were correctly or incorrectly classified} 
+```
+
+```{r}
+table(glm.pred, Direction)
+```
+
+```{r}
+mean(glm.pred == Direction)
+```
+
+```{r}
+(507 + 145) / 1250
+```
+
+```{r}
+sum(glm.pred == Direction)
+```
+
+```{=latex}
+\emph{Create a training data set from 2001 to 2004, and a held out data set from 2005}
+```
+
+```{r}
+train <- (Year < 2005)
+Smarket.2005 <- Smarket[!train, ]
+dim(Smarket.2005)
+```
+
+```{r}
+Direction.2005 <- Direction[!train]
+```
+
+```{r}
+# using the subset argument to fit the model with data before 2005
+glm.fits <- glm(
+  Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
+  data = Smarket,
+  family = binomial,
+  subset = train
+)
+glm.probs <- predict(glm.fits, Smarket.2005,
+                     type = "response")
+```
+
+```{r}
+glm.pred <- rep("Down", 252)
+glm.pred[glm.probs > .5] <- "Up"
+table(glm.pred, Direction.2005)
+```
+
+```{r}
+round(mean(glm.pred == Direction.2005), 2)
+
+```
+
+```{r}
+round(mean(glm.pred != Direction.2005), 2)
+```
+
+```{=latex}
+\emph{Refit the model using only Lag1 and Lag2} 
+```
+
+```{r}
+glm.fits <- glm(
+  Direction ~ Lag1 + Lag2, data = Smarket,
+  family=binomial, subset = train)
+glm.prob <- predict(glm.fits, Smarket.2005,
+                    type = "response")
+glm.pred <- rep("Down", 252)
+glm.pred[glm.prob > .5] <- "Up"
+table(glm.pred, Direction.2005)
+```
+
+```{r}
+mean(glm.pred == Direction.2005)
+```
+
+```{r}
+106 / (106 + 76)
+```
+
+```{=latex}
+\emph{Suppose if we want to predict Direction on a day when Lag1$=1.2$ and Lag2$=1.1$ respectively, and on a day when they equal $1.5$ and $-0.8$:}
+```
+
+```{r}
+round(predict(glm.fits,
+        newdata = data.frame(Lag1 = c(1.2, 1.5),
+                             Lag2 = c(1.1, -0.8)),
+        type="response"), 2)
+```
+
+```{r}
+round(predict(glm.fits,
+        newdata = data.frame(Lag1 = c(1.2, 1.5),
+                             Lag2 = c(1.1, -0.8)),
+        ), 2)
+```
+
+```{=latex}
+\emph{In the function,
+predict(), 
+the default of "type" returns the logit scale,
+and when the argument type = "response",
+it returns the  predicted probablities:
+}
+$$
+\textrm{logit}(p)
+=
+\ln\left(
+\frac{p}{1-p}
+\right),
+$$
+\emph{for example:}
+```
+
+```{r}
+p = 0.48
+round(log(p/(1-p)), 2)
+```
+
+
+
