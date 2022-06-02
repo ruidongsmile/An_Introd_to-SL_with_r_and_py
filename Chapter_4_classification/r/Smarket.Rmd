@@ -1,7 +1,9 @@
 ---
 title: "The Stock Marker Data"
 output:
-  pdf_document: default
+  pdf_document:
+    toc: true
+    number_sections: true
   html_notebook: default
 ---
 
@@ -205,6 +207,154 @@ $$
 p = 0.48
 round(log(p/(1-p)), 2)
 ```
+
+```{=latex}
+\section{Linear Discriminant Analysis}
+```
+
+```{r}
+library(MASS)
+lda.fit <- lda(
+  Direction ~ Lag1 + Lag2,
+  data = Smarket,
+  subset = train
+  )
+lda.fit
+```
+
+```{r}
+plot(lda.fit)
+```
+
+```{r}
+lda.pred <- predict(lda.fit, Smarket.2005)
+names(lda.pred)
+```
+
+```{r}
+lda.class <- lda.pred$class
+table(lda.class, Direction.2005)
+```
+
+```{r}
+mean(lda.class == Direction.2005)
+```
+
+```{r}
+sum(lda.pred$posterior[, 1] >= .5)
+```
+
+```{r}
+sum(lda.pred$posterior[, 1] < .5)
+```
+
+```{r}
+lda.pred$posterior[1:20, 1]
+```
+
+```{r}
+lda.class[1:20]
+```
+
+```{r}
+sum(lda.pred$posterior[, 1] > .9)
+```
+
+```{=latex}
+\section{Quadratic Discriminant Analysis}
+```
+
+```{r}
+qda.fit <- qda(
+  Direction ~ Lag1 + Lag2,
+  data = Smarket,
+  subset = train
+  )
+qda.fit
+```
+
+```{r}
+qda.class <- predict(qda.fit, Smarket.2005)$class
+table(qda.class, Direction.2005)
+```
+
+```{r}
+mean(qda.class == Direction.2005)
+```
+
+```{=latex}
+\section{Naive Bayes}
+```
+
+```{r}
+library(e1071)
+nb.fit <- naiveBayes(
+  Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
+nb.fit
+```
+
+```{r}
+mean(Lag1[train][Direction[train] == "Down"])
+```
+
+
+```{r}
+sd(Lag1[train][Direction[train] == "Down"])
+```
+
+```{r}
+nb.class <- predict(nb.fit, Smarket.2005)
+table(nb.class, Direction.2005)
+```
+
+```{r}
+mean(nb.class == Direction.2005)
+```
+
+```{r}
+nb.preds <- predict(nb.fit, Smarket.2005, type = "raw")
+nb.preds[1:5, ]
+```
+
+```{=latex}
+\section{K-Nearest Neighbors}
+```
+
+```{r}
+library(class)
+train.X <- cbind(Lag1, Lag2)[train,]
+train.X[1:5, ]
+```
+
+```{r}
+test.X <- cbind(Lag1, Lag2)[!train, ]
+```
+
+```{r}
+train.Direction <- Direction[train]
+```
+
+```{r}
+set.seed(1)
+knn.pred <- knn(train.X, test.X, train.Direction, k = 1)
+table(knn.pred, Direction.2005)
+```
+
+```{r}
+mean(knn.pred == Direction.2005)
+```
+
+```{r}
+knn.pred <- knn(train.X, test.X, train.Direction, k = 3)
+table(knn.pred, Direction.2005)
+```
+
+```{r}
+mean(knn.pred == Direction.2005)
+```
+
+
+
 
 
 
