@@ -11,3 +11,57 @@ output:
 \section{Load the Data}
 ```
 
+
+```{r}
+library(ISLR2)
+names(Caravan)
+```
+
+
+
+```{r}
+summary(Caravan)
+```
+```{r}
+dim(Caravan)
+```
+
+```{r}
+attach(Caravan)
+summary(Purchase)
+```
+
+```{r}
+standardized.X <- scale(Caravan[, -86])
+var(Caravan[, 1])
+```
+
+```{r}
+var(Caravan[, 2])
+```
+
+```{r}
+var(standardized.X[, 1])
+```
+
+```{r}
+var(standardized.X[, 2])
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
