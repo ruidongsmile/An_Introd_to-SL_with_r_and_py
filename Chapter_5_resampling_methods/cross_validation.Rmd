@@ -1,0 +1,102 @@
+---
+title: "The Validation Set Approach"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+  html_notebook: default
+---
+
+```{=latex}
+\section{Load the Data}
+
+```
+
+
+```{r}
+library(ISLR2)
+set.seed(1)
+train <- sample(392, 196)
+```
+
+```{r}
+names(Auto)
+```
+
+
+```{r}
+lm.fit <- lm(mpg ~ horsepower, data = Auto, subset = train)
+```
+
+```{r}
+attach(Auto)
+# -train index below selects only the observations that are not in the training set.
+mean((mpg - predict(lm.fit, Auto))[-train]^2)
+```
+
+
+```{r}
+lm.fit2 <- lm(mpg ~ poly(horsepower, 2), data = Auto,
+              subset = train)
+mean((mpg - predict(lm.fit2, Auto))[-train]^2)
+```
+
+```{r}
+lm.fit3 <- lm(mpg ~ poly(horsepower, 3), data = Auto,
+              subset = train)
+mean((mpg - predict(lm.fit3, Auto))[-train]^2)
+```
+
+```{=latex}
+\section{Leave-One-Out Cross-Validation}
+```
+
+```{=latex}
+glm() \emph{without passing in the} family \emph{argument is the same as} lm() :
+```
+
+```{r}
+glm.fit <- glm(mpg ~ horsepower, data = Auto)
+coef(glm.fit)
+```
+
+```{r}
+lm.fit <- lm(mpg ~ horsepower, data = Auto)
+coef(lm.fit)
+```
+
+```{r}
+library(boot)
+glm.fit <- glm(mpg ~ horsepower, data = Auto)
+cv.err <- cv.glm(Auto, glm.fit)
+cv.err$delta
+
+```
+
+```{r}
+cv.error <- rep(0, 10)
+for (i in 1:10) {
+  glm.fit <- glm(mpg ~ poly(horsepower, i), data = Auto)
+  cv.error[i] <- cv.glm(Auto, glm.fit)$delta[1]
+}
+cv.error
+```
+
+```{=latex}
+\section{k-Fold Cross-Validation}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

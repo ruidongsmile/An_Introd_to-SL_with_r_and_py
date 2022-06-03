@@ -48,7 +48,13 @@ var(standardized.X[, 1])
 var(standardized.X[, 2])
 ```
 
+```{r}
+test <- 1:1000
+train.X <- standardized.X[-test, ]
+test.X <- standardized.X[test,]
+train.Y <- Purchase[-test]
 
+```
 
 
 
