@@ -1,0 +1,12 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+require(ISLR2)
+require(tidyverse)
+ggplot(data = Auto) +
+  geom_point(mapping = aes(x = horsepower, y = mpg))
+
+```
