@@ -11,7 +11,7 @@
 
 
 
-<title>The Validation Set Approach</title>
+<title>The Bootstrap</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1762,7 +1762,7 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">The Validation Set Approach</h1>
+<h1 class="title toc-ignore">The Bootstrap</h1>
 
 </div>
 
@@ -1770,136 +1770,167 @@ pre code {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShJU0xSMilcbnNldC5zZWVkKDEpXG50cmFpbiA8LSBzYW1wbGUoMzkyLCAxOTYpXG5gYGAifQ== -->
-<pre class="r"><code>library(ISLR2)
-set.seed(1)
-train &lt;- sample(392, 196)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFtZXMoQXV0bylcbmBgYCJ9 -->
-<pre class="r"><code>names(Auto)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwibXBnXCIgICAgICAgICAgXCJjeWxpbmRlcnNcIiAgICBcImRpc3BsYWNlbWVudFwiXG5bNF0gXCJob3JzZXBvd2VyXCIgICBcIndlaWdodFwiICAgICAgIFwiYWNjZWxlcmF0aW9uXCJcbls3XSBcInllYXJcIiAgICAgICAgIFwib3JpZ2luXCIgICAgICAgXCJuYW1lXCIgICAgICAgIFxuIn0= -->
-<pre><code>[1] &quot;mpg&quot;          &quot;cylinders&quot;    &quot;displacement&quot;
-[4] &quot;horsepower&quot;   &quot;weight&quot;       &quot;acceleration&quot;
-[7] &quot;year&quot;         &quot;origin&quot;       &quot;name&quot;        </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG0uZml0IDwtIGxtKG1wZyB+IGhvcnNlcG93ZXIsIGRhdGEgPSBBdXRvLCBzdWJzZXQgPSB0cmFpbilcbmBgYCJ9 -->
-<pre class="r"><code>lm.fit &lt;- lm(mpg ~ horsepower, data = Auto, subset = train)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXR0YWNoKEF1dG8pXG4jIC10cmFpbiBpbmRleCBiZWxvdyBzZWxlY3RzIG9ubHkgdGhlIG9ic2VydmF0aW9ucyB0aGF0IGFyZSBub3QgaW4gdGhlIHRyYWluaW5nIHNldC5cbm1lYW4oKG1wZyAtIHByZWRpY3QobG0uZml0LCBBdXRvKSlbLXRyYWluXV4yKVxuYGBgIn0= -->
-<pre class="r"><code>attach(Auto)
-# -train index below selects only the observations that are not in the training set.
-mean((mpg - predict(lm.fit, Auto))[-train]^2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIzLjI2NjAxXG4ifQ== -->
-<pre><code>[1] 23.26601</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG0uZml0MiA8LSBsbShtcGcgfiBwb2x5KGhvcnNlcG93ZXIsIDIpLCBkYXRhID0gQXV0byxcbiAgICAgICAgICAgICAgc3Vic2V0ID0gdHJhaW4pXG5tZWFuKChtcGcgLSBwcmVkaWN0KGxtLmZpdDIsIEF1dG8pKVstdHJhaW5dXjIpXG5gYGAifQ== -->
-<pre class="r"><code>lm.fit2 &lt;- lm(mpg ~ poly(horsepower, 2), data = Auto,
-              subset = train)
-mean((mpg - predict(lm.fit2, Auto))[-train]^2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4LjcxNjQ2XG4ifQ== -->
-<pre><code>[1] 18.71646</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG0uZml0MyA8LSBsbShtcGcgfiBwb2x5KGhvcnNlcG93ZXIsIDMpLCBkYXRhID0gQXV0byxcbiAgICAgICAgICAgICAgc3Vic2V0ID0gdHJhaW4pXG5tZWFuKChtcGcgLSBwcmVkaWN0KGxtLmZpdDMsIEF1dG8pKVstdHJhaW5dXjIpXG5gYGAifQ== -->
-<pre class="r"><code>lm.fit3 &lt;- lm(mpg ~ poly(horsepower, 3), data = Auto,
-              subset = train)
-mean((mpg - predict(lm.fit3, Auto))[-train]^2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4Ljc5NDAxXG4ifQ== -->
-<pre><code>[1] 18.79401</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2xtLmZpdCA8LSBnbG0obXBnIH4gaG9yc2Vwb3dlciwgZGF0YSA9IEF1dG8pXG5jb2VmKGdsbS5maXQpXG5gYGAifQ== -->
-<pre class="r"><code>glm.fit &lt;- glm(mpg ~ horsepower, data = Auto)
-coef(glm.fit)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiKEludGVyY2VwdCkgIGhvcnNlcG93ZXIgXG4gMzkuOTM1ODYxMCAgLTAuMTU3ODQ0NyBcbiJ9 -->
-<pre><code>(Intercept)  horsepower 
- 39.9358610  -0.1578447 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG0uZml0IDwtIGxtKG1wZyB+IGhvcnNlcG93ZXIsIGRhdGEgPSBBdXRvKVxuY29lZihsbS5maXQpXG5gYGAifQ== -->
-<pre class="r"><code>lm.fit &lt;- lm(mpg ~ horsepower, data = Auto)
-coef(lm.fit)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiKEludGVyY2VwdCkgIGhvcnNlcG93ZXIgXG4gMzkuOTM1ODYxMCAgLTAuMTU3ODQ0NyBcbiJ9 -->
-<pre><code>(Intercept)  horsepower 
- 39.9358610  -0.1578447 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShib290KVxuZ2xtLmZpdCA8LSBnbG0obXBnIH4gaG9yc2Vwb3dlciwgZGF0YSA9IEF1dG8pXG5jdi5lcnIgPC0gY3YuZ2xtKEF1dG8sIGdsbS5maXQpXG5jdi5lcnIkZGVsdGFcbmBgYCJ9 -->
-<pre class="r"><code>library(boot)
-glm.fit &lt;- glm(mpg ~ horsepower, data = Auto)
-cv.err &lt;- cv.glm(Auto, glm.fit)
-cv.err$delta</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI0LjIzMTUxIDI0LjIzMTE0XG4ifQ== -->
-<pre><code>[1] 24.23151 24.23114</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3YuZXJyb3IgPC0gcmVwKDAsIDEwKVxuZm9yIChpIGluIDE6MTApIHtcbiAgZ2xtLmZpdCA8LSBnbG0obXBnIH4gcG9seShob3JzZXBvd2VyLCBpKSwgZGF0YSA9IEF1dG8pXG4gIGN2LmVycm9yW2ldIDwtIGN2LmdsbShBdXRvLCBnbG0uZml0KSRkZWx0YVsxXVxufVxuY3YuZXJyb3JcbmBgYCJ9 -->
-<pre class="r"><code>cv.error &lt;- rep(0, 10)
-for (i in 1:10) {
-  glm.fit &lt;- glm(mpg ~ poly(horsepower, i), data = Auto)
-  cv.error[i] &lt;- cv.glm(Auto, glm.fit)$delta[1]
-}
-cv.error</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAyNC4yMzE1MSAxOS4yNDgyMSAxOS4zMzQ5OCAxOS40MjQ0MyAxOS4wMzMyMVxuIFs2XSAxOC45Nzg2NCAxOC44MzMwNSAxOC45NjExNSAxOS4wNjg2MyAxOS40OTA5M1xuIn0= -->
-<pre><code> [1] 24.23151 19.24821 19.33498 19.42443 19.03321
- [6] 18.97864 18.83305 18.96115 19.06863 19.49093</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3YuZXJyb3IuMTBcblxuYGBgIn0= -->
-<pre class="r"><code>cv.error.10
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxwaGEuZm4oUG9ydGZvbGlvLCBzYW1wbGUoMTAwLCAxMDAsIHJlcGxhY2UgPSBUKSlcblxuYGBgIn0= -->
+<pre class="r"><code>alpha.fn(Portfolio, sample(100, 100, replace = T))
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAyNC4yNzIwNyAxOS4yNjkwOSAxOS4zNDgwNSAxOS4yOTQ5NiAxOS4wMzE5OFxuIFs2XSAxOC44OTc4MSAxOS4xMjA2MSAxOS4xNDY2NiAxOC44NzAxMyAyMC45NTUyMFxuIn0= -->
-<pre><code> [1] 24.27207 19.26909 19.34805 19.29496 19.03198
- [6] 18.89781 19.12061 19.14666 18.87013 20.95520</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNTM4NTMyNlxuIn0= -->
+<pre><code>[1] 0.5385326</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9vdChQb3J0Zm9saW8sIGFscGhhLmZuLCBSID0gMTAwMClcblxuYGBgIn0= -->
+<pre class="r"><code>boot(Portfolio, alpha.fn, R = 1000)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5PUkRJTkFSWSBOT05QQVJBTUVUUklDIEJPT1RTVFJBUFxuXG5cbkNhbGw6XG5ib290KGRhdGEgPSBQb3J0Zm9saW8sIHN0YXRpc3RpYyA9IGFscGhhLmZuLCBSID0gMTAwMClcblxuXG5Cb290c3RyYXAgU3RhdGlzdGljcyA6XG4gICAgIG9yaWdpbmFsICAgICAgIGJpYXMgICAgc3RkLiBlcnJvclxudDEqIDAuNTc1ODMyMSAwLjAwMDc5NTk0NzUgIDAuMDg5NjkwNzRcbiJ9 -->
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = Portfolio, statistic = alpha.fn, R = 1000)
+
+
+Bootstrap Statistics :
+     original       bias    std. error
+t1* 0.5758321 0.0007959475  0.08969074</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9vdC5mbihBdXRvLCAxOjM5MilcblxuYGBgIn0= -->
+<pre class="r"><code>boot.fn(Auto, 1:392)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiKEludGVyY2VwdCkgIGhvcnNlcG93ZXIgXG4gMzkuOTM1ODYxMCAgLTAuMTU3ODQ0NyBcbiJ9 -->
+<pre><code>(Intercept)  horsepower 
+ 39.9358610  -0.1578447 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9vdC5mbihBdXRvLCBzYW1wbGUoMzkyLCAzOTIsIHJlcGxhY2UgPSBUKSlcblxuYGBgIn0= -->
+<pre class="r"><code>boot.fn(Auto, sample(392, 392, replace = T))
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiKEludGVyY2VwdCkgIGhvcnNlcG93ZXIgXG4gNDAuMzQwNDUxNyAgLTAuMTYzNDg2OCBcbiJ9 -->
+<pre><code>(Intercept)  horsepower 
+ 40.3404517  -0.1634868 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9vdC5mbihBdXRvLCBzYW1wbGUoMzkyLCAzOTIsIHJlcGxhY2UgPSBUKSlcblxuYGBgIn0= -->
+<pre class="r"><code>boot.fn(Auto, sample(392, 392, replace = T))
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiKEludGVyY2VwdCkgIGhvcnNlcG93ZXIgXG4gNDAuMTE4NjkwNiAgLTAuMTU3NzA2MyBcbiJ9 -->
+<pre><code>(Intercept)  horsepower 
+ 40.1186906  -0.1577063 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9vdChBdXRvLCBib290LmZuLCAxMDAwKVxuXG5gYGAifQ== -->
+<pre class="r"><code>boot(Auto, boot.fn, 1000)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5PUkRJTkFSWSBOT05QQVJBTUVUUklDIEJPT1RTVFJBUFxuXG5cbkNhbGw6XG5ib290KGRhdGEgPSBBdXRvLCBzdGF0aXN0aWMgPSBib290LmZuLCBSID0gMTAwMClcblxuXG5Cb290c3RyYXAgU3RhdGlzdGljcyA6XG4gICAgICBvcmlnaW5hbCAgICAgICAgYmlhcyAgICBzdGQuIGVycm9yXG50MSogMzkuOTM1ODYxMCAgMC4wNTIyOTcxNjM1ICAwLjg0MDAxNjE0XG50MiogLTAuMTU3ODQ0NyAtMC4wMDA2MDI3MDM5ICAwLjAwNzMzMjQzXG4ifQ== -->
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = Auto, statistic = boot.fn, R = 1000)
+
+
+Bootstrap Statistics :
+      original        bias    std. error
+t1* 39.9358610  0.0522971635  0.84001614
+t2* -0.1578447 -0.0006027039  0.00733243</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShsbShtcGcgfiBob3JzZXBvd2VyLCBkYXRhID0gQXV0bykpJGNvZWZcblxuYGBgIn0= -->
+<pre class="r"><code>summary(lm(mpg ~ horsepower, data = Auto))$coef
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBFc3RpbWF0ZSAgU3RkLiBFcnJvciAgIHQgdmFsdWVcbihJbnRlcmNlcHQpIDM5LjkzNTg2MTAgMC43MTc0OTg2NTYgIDU1LjY1OTg0XG5ob3JzZXBvd2VyICAtMC4xNTc4NDQ3IDAuMDA2NDQ1NTAxIC0yNC40ODkxNFxuICAgICAgICAgICAgICAgICBQcig+fHR8KVxuKEludGVyY2VwdCkgMS4yMjAzNjJlLTE4N1xuaG9yc2Vwb3dlciAgIDcuMDMxOTg5ZS04MVxuIn0= -->
+<pre><code>              Estimate  Std. Error   t value
+(Intercept) 39.9358610 0.717498656  55.65984
+horsepower  -0.1578447 0.006445501 -24.48914
+                 Pr(&gt;|t|)
+(Intercept) 1.220362e-187
+horsepower   7.031989e-81</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm9vdChBdXRvLCBib290LmZuLCAxMDAwKVxuXG5gYGAifQ== -->
+<pre class="r"><code>boot(Auto, boot.fn, 1000)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5PUkRJTkFSWSBOT05QQVJBTUVUUklDIEJPT1RTVFJBUFxuXG5cbkNhbGw6XG5ib290KGRhdGEgPSBBdXRvLCBzdGF0aXN0aWMgPSBib290LmZuLCBSID0gMTAwMClcblxuXG5Cb290c3RyYXAgU3RhdGlzdGljcyA6XG4gICAgICAgIG9yaWdpbmFsICAgICAgICBiaWFzICAgIHN0ZC4gZXJyb3JcbnQxKiA1Ni45MDAwOTk3MDIgLTcuMTQzMTIxZS0wMyAyLjA2MDgwNjc5N1xudDIqIC0wLjQ2NjE4OTYzMCAtNi4yMzE0NDFlLTA1IDAuMDMyNTEyMDg2XG50MyogIDAuMDAxMjMwNTM2ICA5LjQyMDg1OGUtMDcgMC4wMDAxMTcxMjZcbiJ9 -->
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = Auto, statistic = boot.fn, R = 1000)
+
+
+Bootstrap Statistics :
+        original        bias    std. error
+t1* 56.900099702 -7.143121e-03 2.060806797
+t2* -0.466189630 -6.231441e-05 0.032512086
+t3*  0.001230536  9.420858e-07 0.000117126</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShsbShtcGcgfiBob3JzZXBvd2VyICsgSShob3JzZXBvd2VyXjIpLFxuICAgICAgICAgICBkYXRhID0gQXV0bykpJGNvZWZcblxuYGBgIn0= -->
+<pre class="r"><code>summary(lm(mpg ~ horsepower + I(horsepower^2),
+           data = Auto))$coef
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgICAgICBFc3RpbWF0ZSAgIFN0ZC4gRXJyb3IgICB0IHZhbHVlXG4oSW50ZXJjZXB0KSAgICAgNTYuOTAwMDk5NzAyIDEuODAwNDI2ODA2MyAgMzEuNjAzNjdcbmhvcnNlcG93ZXIgICAgICAtMC40NjYxODk2MzAgMC4wMzExMjQ2MTcxIC0xNC45NzgxNlxuSShob3JzZXBvd2VyXjIpICAwLjAwMTIzMDUzNiAwLjAwMDEyMjA3NTkgIDEwLjA4MDA5XG4gICAgICAgICAgICAgICAgICAgICBQcig+fHR8KVxuKEludGVyY2VwdCkgICAgIDEuNzQwOTExZS0xMDlcbmhvcnNlcG93ZXIgICAgICAgMi4yODk0MjllLTQwXG5JKGhvcnNlcG93ZXJeMikgIDIuMTk2MzQwZS0yMVxuIn0= -->
+<pre><code>                    Estimate   Std. Error   t value
+(Intercept)     56.900099702 1.8004268063  31.60367
+horsepower      -0.466189630 0.0311246171 -14.97816
+I(horsepower^2)  0.001230536 0.0001220759  10.08009
+                     Pr(&gt;|t|)
+(Intercept)     1.740911e-109
+horsepower       2.289429e-40
+I(horsepower^2)  2.196340e-21</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiVGhlIFZhbGlkYXRpb24gU2V0IEFwcHJvYWNoIgpvdXRwdXQ6CiAgcGRmX2RvY3VtZW50OgogICAgdG9jOiB0cnVlCiAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUKICBodG1sX25vdGVib29rOiBkZWZhdWx0Ci0tLQoKYGBgez1sYXRleH0KXHNlY3Rpb257TG9hZCB0aGUgRGF0YX0KCmBgYAoKCmBgYHtyfQpsaWJyYXJ5KElTTFIyKQpzZXQuc2VlZCgxKQp0cmFpbiA8LSBzYW1wbGUoMzkyLCAxOTYpCmBgYAoKYGBge3J9Cm5hbWVzKEF1dG8pCmBgYAoKCmBgYHtyfQpsbS5maXQgPC0gbG0obXBnIH4gaG9yc2Vwb3dlciwgZGF0YSA9IEF1dG8sIHN1YnNldCA9IHRyYWluKQpgYGAKCmBgYHtyfQphdHRhY2goQXV0bykKIyAtdHJhaW4gaW5kZXggYmVsb3cgc2VsZWN0cyBvbmx5IHRoZSBvYnNlcnZhdGlvbnMgdGhhdCBhcmUgbm90IGluIHRoZSB0cmFpbmluZyBzZXQuCm1lYW4oKG1wZyAtIHByZWRpY3QobG0uZml0LCBBdXRvKSlbLXRyYWluXV4yKQpgYGAKCgpgYGB7cn0KbG0uZml0MiA8LSBsbShtcGcgfiBwb2x5KGhvcnNlcG93ZXIsIDIpLCBkYXRhID0gQXV0bywKICAgICAgICAgICAgICBzdWJzZXQgPSB0cmFpbikKbWVhbigobXBnIC0gcHJlZGljdChsbS5maXQyLCBBdXRvKSlbLXRyYWluXV4yKQpgYGAKCmBgYHtyfQpsbS5maXQzIDwtIGxtKG1wZyB+IHBvbHkoaG9yc2Vwb3dlciwgMyksIGRhdGEgPSBBdXRvLAogICAgICAgICAgICAgIHN1YnNldCA9IHRyYWluKQptZWFuKChtcGcgLSBwcmVkaWN0KGxtLmZpdDMsIEF1dG8pKVstdHJhaW5dXjIpCmBgYAoKYGBgez1sYXRleH0KXHNlY3Rpb257TGVhdmUtT25lLU91dCBDcm9zcy1WYWxpZGF0aW9ufQpgYGAKCmBgYHs9bGF0ZXh9CmdsbSgpIFxlbXBoe3dpdGhvdXQgcGFzc2luZyBpbiB0aGV9IGZhbWlseSBcZW1waHthcmd1bWVudCBpcyB0aGUgc2FtZSBhc30gbG0oKSA6CmBgYAoKYGBge3J9CmdsbS5maXQgPC0gZ2xtKG1wZyB+IGhvcnNlcG93ZXIsIGRhdGEgPSBBdXRvKQpjb2VmKGdsbS5maXQpCmBgYAoKYGBge3J9CmxtLmZpdCA8LSBsbShtcGcgfiBob3JzZXBvd2VyLCBkYXRhID0gQXV0bykKY29lZihsbS5maXQpCmBgYAoKYGBge3J9CmxpYnJhcnkoYm9vdCkKZ2xtLmZpdCA8LSBnbG0obXBnIH4gaG9yc2Vwb3dlciwgZGF0YSA9IEF1dG8pCmN2LmVyciA8LSBjdi5nbG0oQXV0bywgZ2xtLmZpdCkKY3YuZXJyJGRlbHRhCgpgYGAKCmBgYHtyfQpjdi5lcnJvciA8LSByZXAoMCwgMTApCmZvciAoaSBpbiAxOjEwKSB7CiAgZ2xtLmZpdCA8LSBnbG0obXBnIH4gcG9seShob3JzZXBvd2VyLCBpKSwgZGF0YSA9IEF1dG8pCiAgY3YuZXJyb3JbaV0gPC0gY3YuZ2xtKEF1dG8sIGdsbS5maXQpJGRlbHRhWzFdCn0KY3YuZXJyb3IKYGBgCgpgYGB7PWxhdGV4fQpcc2VjdGlvbntrLUZvbGQgQ3Jvc3MtVmFsaWRhdGlvbn0KYGBgCgpgYGB7cn0Kc2V0LnNlZWQoMTcpCmN2LmVycm9yLjEwIDwtIHJlcCgwLCAxMCkKZm9yIChpIGluIDE6MTApIHsKICBnbG0uZml0IDwtIGdsbShtcGcgfiBwb2x5KGhvcnNlcG93ZXIsIGkpLCBkYXRhID0gQXV0bykKICBjdi5lcnJvci4xMFtpXSA8LSBjdi5nbG0oQXV0bywgZ2xtLmZpdCwgSyA9IDEwKSRkZWx0YVsxXQp9CmN2LmVycm9yLjEwCmBgYAoKCgoKCgoKCgoKCgoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiVGhlIEJvb3RzdHJhcCIKb3V0cHV0OgogIHBkZl9kb2N1bWVudDoKICAgIHRvYzogdHJ1ZQogICAgbnVtYmVyX3NlY3Rpb25zOiB0cnVlCiAgaHRtbF9ub3RlYm9vazogZGVmYXVsdAogICAgCi0tLQoKYGBgez1sYXRleH0KXHNlY3Rpb257RXN0aW1hdGluZyB0aGUgQWNjdXJhY3kgb2YgYSBTdGF0aXN0aWMgb2YgSW50ZXJlc3R9CmBgYAoKYGBge3J9CnJlcXVpcmUoSVNMUjIpCnJlcXVpcmUoYm9vdCkKYGBgCgpgYGB7cn0KYWxwaGEuZm4gPC0gZnVuY3Rpb24oZGF0YSwgaW5kZXgpIHsKICBYIDwtIGRhdGEkWFtpbmRleF0KICBZIDwtIGRhdGEkWVtpbmRleF0KICAodmFyKFkpIC0gY292KFgsIFkpKSAvICh2YXIoWCkgKyB2YXIoWSkgLSAyICogY292KFgsIFkpKQp9CmBgYAoKYGBge3J9CiMgVXNpbmcgc2FtcGxlKCkgZnVuY3Rpb24gdG8gcmFuZG9tbHkgc2VsZWN0IDEwMCBvYnNlcnZhdGlvbnMgZnJvbSByYW5nZSAxIHRvIDEwMCB3aXRoIHJlcGxhY2VtZW50CnNldC5zZWVkKDcpCmFscGhhLmZuKFBvcnRmb2xpbywgc2FtcGxlKDEwMCwgMTAwLCByZXBsYWNlID0gVCkpCmBgYAoKYGBge3J9CmJvb3QoUG9ydGZvbGlvLCBhbHBoYS5mbiwgUiA9IDEwMDApCmBgYAoKYGBge3J9Cj9Qb3J0Zm9saW8KYGBgCgpgYGB7PWxhdGV4fQpcc2VjdGlvbntFc3RpbWF0aW5nIHRoZSBBY2N1cmFjeSBvZiBhIExpbmVhciBSZWdyZXNzaW9uIE1vZGVsfQpgYGAKCmBgYHtyfQpib290LmZuIDwtIGZ1bmN0aW9uKGRhdGEsIGluZGV4KSB7CiAgY29lZihsbShtcGcgfiBob3JzZXBvd2VyLCBkYXRhID0gZGF0YSwgc3Vic2V0ID0gaW5kZXgpKQp9CmJvb3QuZm4oQXV0bywgMTozOTIpCmBgYAoKYGBge3J9CnNldC5zZWVkKDEpCmJvb3QuZm4oQXV0bywgc2FtcGxlKDM5MiwgMzkyLCByZXBsYWNlID0gVCkpCmBgYAoKYGBge3J9CnNldC5zZWVkKDEpCmJvb3QuZm4oQXV0bywgc2FtcGxlKDM5MiwgMzkyLCByZXBsYWNlID0gVCkpCmBgYAoKYGBge3J9CmJvb3QoQXV0bywgYm9vdC5mbiwgMTAwMCkKYGBgCgpgYGB7cn0Kc3VtbWFyeShsbShtcGcgfiBob3JzZXBvd2VyLCBkYXRhID0gQXV0bykpJGNvZWYKYGBgCgpgYGB7cn0KI0ZpdHRpbmcgYSBxdWFkcmF0aWMgbW9kZWwKYm9vdC5mbiA8LSBmdW5jdGlvbihkYXRhLCBpbmRleCkgewogIGNvZWYoCiAgICBsbShtcGcgfiBob3JzZXBvd2VyICsgSShob3JzZXBvd2VyXjIpLAogICAgICAgZGF0YSA9IGRhdGEsIHN1YnNldCA9IGluZGV4KQogICkKfQpzZXQuc2VlZCgxKQpib290KEF1dG8sIGJvb3QuZm4sIDEwMDApCmBgYAoKYGBge3J9CnN1bW1hcnkobG0obXBnIH4gaG9yc2Vwb3dlciArIEkoaG9yc2Vwb3dlcl4yKSwKICAgICAgICAgICBkYXRhID0gQXV0bykpJGNvZWYKYGBgCgoKCgoKCg==</div>
 
 
 
@@ -1946,7 +1977,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("cross_validation.Rmd");
+  window.initializeSourceEmbed("bootstrap.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

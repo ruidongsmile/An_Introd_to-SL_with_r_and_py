@@ -1,0 +1,92 @@
+---
+title: "The Bootstrap"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+  html_notebook: default
+    
+---
+
+```{=latex}
+\section{Estimating the Accuracy of a Statistic of Interest}
+```
+
+```{r}
+require(ISLR2)
+require(boot)
+```
+
+```{r}
+alpha.fn <- function(data, index) {
+  X <- data$X[index]
+  Y <- data$Y[index]
+  (var(Y) - cov(X, Y)) / (var(X) + var(Y) - 2 * cov(X, Y))
+}
+```
+
+```{r}
+# Using sample() function to randomly select 100 observations from range 1 to 100 with replacement
+set.seed(7)
+alpha.fn(Portfolio, sample(100, 100, replace = T))
+```
+
+```{r}
+boot(Portfolio, alpha.fn, R = 1000)
+```
+
+```{r}
+?Portfolio
+```
+
+```{=latex}
+\section{Estimating the Accuracy of a Linear Regression Model}
+```
+
+```{r}
+boot.fn <- function(data, index) {
+  coef(lm(mpg ~ horsepower, data = data, subset = index))
+}
+boot.fn(Auto, 1:392)
+```
+
+```{r}
+set.seed(1)
+boot.fn(Auto, sample(392, 392, replace = T))
+```
+
+```{r}
+set.seed(1)
+boot.fn(Auto, sample(392, 392, replace = T))
+```
+
+```{r}
+boot(Auto, boot.fn, 1000)
+```
+
+```{r}
+summary(lm(mpg ~ horsepower, data = Auto))$coef
+```
+
+```{r}
+#Fitting a quadratic model
+boot.fn <- function(data, index) {
+  coef(
+    lm(mpg ~ horsepower + I(horsepower^2),
+       data = data, subset = index)
+  )
+}
+set.seed(1)
+boot(Auto, boot.fn, 1000)
+```
+
+```{r}
+summary(lm(mpg ~ horsepower + I(horsepower^2),
+           data = Auto))$coef
+```
+
+
+
+
+
+
