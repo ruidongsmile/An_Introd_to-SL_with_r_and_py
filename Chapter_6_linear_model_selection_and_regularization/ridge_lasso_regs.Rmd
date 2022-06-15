@@ -1,0 +1,103 @@
+---
+title: "Ridge Regression and the Lasso"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+  html_notebook: default
+---
+
+```{=latex}
+\section{Ridge Regression}
+```
+
+```{r}
+library(ISLR2)
+Hitters = na.omit(Hitters)
+```
+
+```{r}
+x <- model.matrix(Salary ~., Hitters)[, -1]
+y <- Hitters$Salary
+```
+
+```{r}
+head(x)
+```
+
+```{r}
+dim(x)
+```
+
+
+```{r}
+library(glmnet)
+grid <- 10^seq(10, -2, length = 100)
+ridge.mod <- glmnet(x, y, alpha = 0, lambda = grid)
+
+```
+
+```{r}
+dim(coef(ridge.mod))
+```
+
+```{r}
+ridge.mod$lambda[50]
+```
+
+```{r}
+coef(ridge.mod)[,50]
+```
+
+```{r}
+sqrt(sum(coef(ridge.mod)[-1, 50]^2))
+```
+
+```{r}
+ridge.mod$lambda[60]
+```
+
+```{r}
+coef(ridge.mod)[, 60]
+```
+
+```{r}
+sqrt(sum(coef(ridge.mod)[-1, 60]^2))
+```
+
+```{r}
+# We can use predict() function to obtain the ridge regression coeff for a new value of \lambda=50:
+predict(ridge.mod, s=50, type = "coefficients")[1:20,]
+```
+
+```{r}
+predict(ridge.mod, s=0.01, type = "coefficients")[1:20, ]
+```
+
+```{r}
+coef(ridge.mod)[, 100]
+```
+
+
+```{r}
+set.seed(1)
+train <- sample(1: nrow(x), nrow(x) / 2)
+test <- (-train)
+y.test <- y[test]
+```
+
+```{r}
+ridge.mod <- glmnet(x[train, ], y[train], alpha=0,
+                    lambda=grid, thresh = 1e-12)
+ridge.pred <- predict(ridge.mod, s = 4, newx = x[test, ])
+mean((ridge.pred - y.test)^2)
+```
+
+
+
+
+
+
+
+
+

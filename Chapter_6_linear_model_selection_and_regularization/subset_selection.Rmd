@@ -1,0 +1,101 @@
+---
+title: "Subset Selection Methods"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+  html_notebook: default
+---
+
+```{=latex}
+\section{Best Subset Selection}
+```
+
+```{r}
+library(ISLR2)
+```
+
+```{r}
+View(Hitters)
+names(Hitters)
+```
+
+```{r}
+dim(Hitters)
+```
+
+```{r}
+is.na(Hitters$Salary)
+```
+
+```{r}
+sum(is.na(Hitters$Salary))
+```
+```{=latex}
+It shows that Salary is missing for $59$ players.
+The na.omit() function removes all of the rows that have missing values in any variable.
+```
+
+`
+```{r}
+Hitters <- na.omit(Hitters)
+dim(Hitters)
+```
+
+```{=latex}
+The {\color{red} regsubsets()} function (part of the {\color{red} leaps} library) performs best subset selection by identifying the best model that contains a given number of predictors,
+where \emph{best} is quantified using RSS.
+```
+
+```{r}
+library(leaps)
+regfit.full <- regsubsets(Salary ~ ., data=Hitters)
+summary(regfit.full)
+```
+
+
+```{r}
+regfig.full <- regsubsets(Salary ~., Hitters, nvmax = 19)
+summary(regfit.full)
+```
+
+
+```{r}
+reg.summary <- summary(regfit.full)
+names(reg.summary)
+```
+
+```{r}
+reg.summary$rsq
+```
+
+```{r}
+# divide the  plotting region into a 2 by 2 grid of panels 
+par(mfrow = c(2, 2))
+plot(reg.summary$rss, xlab = "Number of Variables",
+     ylab = "RSS", type="l")
+plot(reg.summary$adjr2, xlab = "Number of Variables",
+     ylab = "Adjusted RSq", type = "l")
+points(11, reg.summary$adjr2[11], col = "red", cex=2, pch=20)
+```
+
+```{r}
+plot(reg.summary$cp, xlab = "Number of Variables",
+     ylab = "Cp", type="l")
+which.min(reg.summary$cp)
+points(10, reg.summary$cp[10], col = "red",
+       cex = 2, pch = 20)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
